@@ -1,0 +1,52 @@
+/*Layout*/
+*,
+*::before,
+*::after
+ {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Garante que o padding não aumente o tamanho do elemento */
+}
+.area-page{
+    display: grid;
+    grid-template-areas: 
+    'header header header'
+    'aside main main'
+    'footer footer footer';
+    grid-template-rows: auto 2fr auto;
+    grid-template-columns:repeat(3,1fr);        
+    gap: 10px;
+    width: 100%;
+    min-height: 100vh;    
+}
+
+.area-page header{
+    grid-area: header;
+    background-color: lightgrey;
+}
+
+.area-page aside{
+    grid-area: aside;
+    background-color: #dbeafe;
+}
+.area-page main{
+    grid-area: main;
+    background-color: #f8fafc;
+}
+.area-page footer{
+    grid-area: footer;
+    background-color: lightgray;
+}
+
+
+@media(max-width: 768px){
+    .area-page{
+        grid-template-areas: 
+        "header"
+        "aside"
+        "main"
+        "footer";
+
+        grid-template-columns: 1fr;
+    }
+}
