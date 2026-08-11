@@ -19,16 +19,26 @@
         <div class="container">
                 <div class="card-body m-3">
                     <h5>Lista de Tarefa</h5>
-                    <ul class="list-group list-group-flush">
+                    <ul data-js="lista-tarefa" class="list-group list-group-flush">
+                        <li class="list-group-item">Almoçar</li>
+                        <li class="list-group-item">Ir ao Trabalho</li>
+                        <li class="list-group-item">Jantar</li>   
+                    </ul>
+                </div>
+
+                <div class="card-body m-3">
+                    <h5>Lista em Andamento</h5>
+                    <ul data-js="lista-andamento" class="list-group list-group-flush">
                         <li class="list-group-item">Levanta Cedo</li>
                         <li class="list-group-item">Malhar </li>
                         <li class="list-group-item">Estudar</li>   
                     </ul>
                 </div>
-            </div>
+
+                
                 <div class="card-body m-3">
                     <h5>Lista Concluida</h5>
-                    <ol class="list-group list-group-numbered">
+                    <ol data-js="lista-finalizada" class="list-group list-group-numbered">
                         <li class="list-group-item">Ler</li>   
                     </ol>
                 </div>
@@ -38,16 +48,16 @@
     <main>
         <div class="container">
             <div class="card-body d-flex flex-column gap-3 m-3">
-                <input class="form-control" type="text" placeholder="Nova tarefa">
-                    <button class="btn btn-primary">Adicionar</button>
+                <input data-js="adicionar-tarefa" class="form-control" type="text" placeholder="Nova tarefa">
+                    <button data-js="botao-tarefa" class="btn btn-primary">Adicionar</button>
             </div>            
             <div class="card-body d-flex flex-column gap-3 m-3">
-                <input class="form-control" type="text" placeholder="Tarefa">
-                    <button class="btn btn-danger">Remover</button>
+                <input data-js="andamento-tarefa" class="form-control" type="text" placeholder="Tarefa">
+                    <button data-js="botao-andamento" class="btn btn-danger">Andamento</button>
             </div>
             <div class="card-body d-flex flex-column gap-3 m-3">
-                <input class="form-control" type="text" placeholder="Tarefa">
-                    <button class="btn btn-success">Finalizada</button>
+                <input data-js="remova-tarefa" class="form-control" type="text" placeholder="Tarefa">
+                    <button data-js="botao-finalizada" class="btn btn-success">Finalizada</button>
             </div>            
         </div>    
     </main>
@@ -60,7 +70,7 @@
             </div>
         </div>
     </footer>
-
+    <script type="module" src="./scr/app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
   </body>  
 </html>
