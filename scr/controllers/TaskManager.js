@@ -1,8 +1,8 @@
 
 export class TaskManager{
     constructor(){
-        // Captura dos elementos da tela        
-        
+        /*Referencia no DOM */
+
         // Botões
         this.botaoAdicionar = document.querySelector('[data-js="botao-tarefa"]');
         this.botaoAndamento = document.querySelector('[data-js="botao-andamento"]');
@@ -18,11 +18,17 @@ export class TaskManager{
         this.listaAndamento = document.querySelector('[data-js="lista-andamento"]');
         this.listaFinalizada = document.querySelector('[data-js="lista-finalizada"]')
 
-        }    
+
+        /*Estado*/
+
+        this.tarefas = [];
+        }
+            
         init(){
         // Inicializa a aplicação
         // Chama o método que registra os eventos
-        this.registrarEventos()        
+        this.registrarEventos()
+        this.renderizacao()                
         }
 
         registrarEventos(){
@@ -58,51 +64,99 @@ export class TaskManager{
     }
         adicionarTarefa(){
             // Regra para adicionar tarefa
-            const tarefaAdicionada = this.novaTarefa.value.trim()
 
+            console.log("THIS adicionar", this)
+            // A tarefaAdicionada/tarefa sendo atribuida tarefaNova/Input e criando uma condição estiver vazio emite um alerta
+            const tarefaAdicionada = this.novaTarefa.value.trim()
             if(tarefaAdicionada === ""){
                 alert("Digite uma tarefa antes de adicionar");
                 return
             }
-            const listaAdicionada = document.createElement("li");
-            listaAdicionada.classList.add("list-group-item");
-            listaAdicionada.textContent = tarefaAdicionada;
-            this.listaIniciada.appendChild(listaAdicionada);
+            // Alterando o estado e adiciona a nova tarefa
+            this.tarefas.push({
+                nome: tarefaAdicionada,
+                status: 'Lista de Tarefa'
+            })
+            //Chamada para renderizar a Lista de Tarefa
+            this.renderizacao();
 
+            // Limpa o imput
             this.novaTarefa.value = "";
-            this.novaTarefa.focus();
         }
 
         moverParaAndamento(){
-        // Regra para mover tarefa para andamento
-        const nomeTarefa = this.andamentoTarefa.value.trim();
 
-        const tarefas = this.listaIniciada.querySelectorAll("li");
-            
-        for(const tarefa of tarefas){    
-            if(tarefa.textContent.toLowerCase() === nomeTarefa.toLowerCase()){
-                this.listaAndamento.appendChild(tarefa);
-                this.andamentoTarefa.value = "";
-                return;
+        // Regra para mover tarefa para andamento
+        const tarefaAndamento = this.andamentoTarefa.value.trim();
+
+        // Alterando o estado e movendo a tarefa para andamento
+
+        //Percorrendo o estado tarefas
+        for(const tarefa of this.tarefas){
+            // Com a condição de encotrar o nome da tarefa igual ao nome do input e troca o estado da tarefa
+            if(tarefa.nome.toLowerCase() === tarefaAndamento.toLowerCase()){
+                tarefa.status = "Andamento";
             }
-        }  
-        alert("Tarefa não encontrado")
-        }    
+        }
+            //Chamada para renderizar a Lista de Andamento
+            this.renderizacao();
+
+            // Limpa o imput
+            this.andamentoTarefa.value = "";
+        }
+            
         finalizarTarefa(){
             // Regra para concluir tarefa
+
+        //A tarefaFinalizada sendo atribuida a removaTarefa/Input             
         const tarefaFinalizada = this.removaTarefa.value.trim();
         
-        const finalizadaTabela = this.listaAndamento.querySelectorAll("li")
-
-        for(const tarefa of finalizadaTabela){
-            if(tarefa.textContent === tarefaFinalizada){
-                this.listaFinalizada.appendChild(tarefa);
-                this.removaTarefa.value = "";
-                return;
+        for(const tarefa of this.tarefas){
+            // Com a condição de encotrar o nome da tarefa igual ao nome do input e troca o estado da tarefa            
+            if(tarefa.nome.toLowerCase() === tarefaFinalizada.toLowerCase()){
+                tarefa.status = "Finalizada";
             }
         }
-        alert("Tarefa não encontrada");
+            //Chamada para renderizar a Lista Finalizada
+            this.renderizacao();
+
+            // Limpa o imput
+            this.removaTarefa.value = "";
         }
 
+        renderizacao(){
+            //Iniciando a Lista Vazia
+            this.listaIniciada.innerHTML = "";
+            this.listaAndamento.innerHTML = "";
+            this.listaFinalizada.innerHTML = "";
 
-}
+        // Render da Lista de Tarefa           
+            for(const tarefa of this.tarefas){
+                if(tarefa.status === 'Lista de Tarefa'){
+                    const linhaAdicionada = document.createElement("li");
+                    linhaAdicionada.classList.add("list-group-item");
+                    linhaAdicionada.textContent = tarefa.nome;
+                    this.listaIniciada.appendChild(linhaAdicionada);             
+                }
+            }
+        // Render da Lista em Andamento    
+            for(const tarefa of this.tarefas){
+                if(tarefa.status === 'Andamento'){
+                    const linhaAndamento = document.createElement("li");
+                    linhaAndamento.classList.add("list-group-item");
+                    linhaAndamento.textContent = tarefa.nome;
+                    this.listaAndamento.appendChild(linhaAndamento);
+                }
+            }
+        
+        // Render de Lista Concluida
+            for(const tarefa of this.tarefas){
+                if(tarefa.status === 'Finalizada'){
+                    const linhaFinalizada = document.createElement("li");
+                    linhaFinalizada.classList.add("list-group-item");
+                    linhaFinalizada.textContent = tarefa.nome;
+                    this.listaFinalizada.appendChild(linhaFinalizada);
+                }
+            }
+        }
+    }
