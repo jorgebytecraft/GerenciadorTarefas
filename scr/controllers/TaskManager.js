@@ -18,17 +18,19 @@ export class TaskManager{
         this.listaAndamento = document.querySelector('[data-js="lista-andamento"]');
         this.listaFinalizada = document.querySelector('[data-js="lista-finalizada"]')
 
-
         /*Estado*/
-
         this.tarefas = [];
+        
         }
-            
-        init(){
         // Inicializa a aplicação
+        init(){
+
+        // Chama o método de carregar os estados
+        this.carregarTarefa();
         // Chama o método que registra os eventos
-        this.registrarEventos()
-        this.renderizacao()                
+        this.registrarEventos();
+        // Chama o método que renderiza o DOM
+        this.renderizacao();           
         }
 
         registrarEventos(){
@@ -61,11 +63,11 @@ export class TaskManager{
             }
         });
 
-    }
+    }   
+        //Comportamento da tarefa
         adicionarTarefa(){
             // Regra para adicionar tarefa
-
-            console.log("THIS adicionar", this)
+            
             // A tarefaAdicionada/tarefa sendo atribuida tarefaNova/Input e criando uma condição estiver vazio emite um alerta
             const tarefaAdicionada = this.novaTarefa.value.trim()
             if(tarefaAdicionada === ""){
@@ -77,6 +79,10 @@ export class TaskManager{
                 nome: tarefaAdicionada,
                 status: 'Lista de Tarefa'
             })
+
+            //Chamada para salvar a Tarefa
+            this.salvarTarefa()
+
             //Chamada para renderizar a Lista de Tarefa
             this.renderizacao();
 
@@ -98,6 +104,9 @@ export class TaskManager{
                 tarefa.status = "Andamento";
             }
         }
+            //Chamada para salvar a Tarefa
+            this.salvarTarefa()
+
             //Chamada para renderizar a Lista de Andamento
             this.renderizacao();
 
@@ -117,26 +126,58 @@ export class TaskManager{
                 tarefa.status = "Finalizada";
             }
         }
+
+            //Chamada para salvar a Tarefa
+            this.salvarTarefa()
+
             //Chamada para renderizar a Lista Finalizada
             this.renderizacao();
 
             // Limpa o imput
             this.removaTarefa.value = "";
         }
+               /*Persistencia de Dados */
 
-        renderizacao(){
+        /* Serialização  */
+        salvarTarefa(){
+            try {
+                const jsonString = JSON.stringify(this.tarefas);
+                console.log("JSON SERIALIZADO ", jsonString)
+
+                localStorage.setItem("tarefas", jsonString);
+            } catch (error) {
+                console.log("ERRO AO SERIALIZAR: ", error);
+            }
+        }
+        /* Desserialização */
+        carregarTarefa(){
+            try {
+                const jsonObject = localStorage.getItem("tarefas");
+                if(jsonObject){
+                    const tarefasObject = JSON.parse(jsonObject);
+                    console.log("Objeto desserializado ",tarefasObject);
+                    this.tarefas = tarefasObject;
+                }else{
+                    console.warn("Nenhum dos dados encontrado no localStorage. ")
+                }
+            }catch (error) {
+                console.error("Erro ao desserializar: ", error);  
+            }
+        } 
+
+        renderizacao(){       
             //Iniciando a Lista Vazia
             this.listaIniciada.innerHTML = "";
             this.listaAndamento.innerHTML = "";
             this.listaFinalizada.innerHTML = "";
 
         // Render da Lista de Tarefa           
-            for(const tarefa of this.tarefas){
+            for(const tarefa of this.tarefas){              
                 if(tarefa.status === 'Lista de Tarefa'){
                     const linhaAdicionada = document.createElement("li");
                     linhaAdicionada.classList.add("list-group-item");
                     linhaAdicionada.textContent = tarefa.nome;
-                    this.listaIniciada.appendChild(linhaAdicionada);             
+                    this.listaIniciada.appendChild(linhaAdicionada);                             
                 }
             }
         // Render da Lista em Andamento    
