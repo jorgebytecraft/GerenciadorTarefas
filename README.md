@@ -32,6 +32,6 @@ Clone este repositório ou baixe os arquivos em sua máquina.
 Abra a pasta no VS Code.
 Abra o arquivo index.html diretamente no seu navegador (ou utilize a extensão Live Server).
 
-Autor
+Autor 
 Desenvolvido por Jorge Borges Rêgo.
 Graduado em Analise e Desenvolvimento de Sistema
